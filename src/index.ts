@@ -8,6 +8,12 @@ interface params {
     detectAccents?: boolean
 }
 
+
+interface position {
+    start: number,
+    end: number
+}
+
 function formatStr(str: string, params: params) {
     const keySensitive: boolean = params?.keySensitive === undefined ? true : params?.keySensitive
     const detectAccents: boolean = params?.detectAccents === undefined ? true : params?.detectAccents
@@ -20,7 +26,7 @@ function formatStr(str: string, params: params) {
 }
 
 function getAllPositions(fullStr: string, query: string) {
-    const positions = []
+    const positions: position[] = []
     let position = fullStr.indexOf(query)
 
     while (position !== -1) {
@@ -30,7 +36,22 @@ function getAllPositions(fullStr: string, query: string) {
 
     return positions
 }
-        
+
+function filterPositionsByIndex(allPositions: position[], index: number | number[]) {
+    const maxIndex = allPositions.length
+    if (typeof index === 'number') {
+        const realIndex = index % maxIndex
+        const filteredPositions = [allPositions[realIndex]]
+
+        return filteredPositions
+    } else {
+        const realIndex = index.map(i => i % maxIndex)
+        const filteredPositions = allPositions.filter((_, i) => realIndex.includes(i))
+
+        return filteredPositions
+    }
+}
+
 export class LookFor {
     props: props
     params: params | undefined
@@ -40,7 +61,7 @@ export class LookFor {
         this.params = params
     }
 
-    highlight(fullStr: string, query: string, index?: number): string {
+    highlight(fullStr: string, query: string, index?: number | number[]): string {
         const valProp = /^[a-zA-Z0-9\-]+$/
     
         if (!this.props.tag) throw new Error("Missing 'tag' parameter") // tag is compulsory
@@ -57,8 +78,10 @@ export class LookFor {
         const formattedQuery = this.params ? formatStr(query, this.params) : query
     
         let allPositions = getAllPositions(formattedFullStr, formattedQuery)
-        allPositions = index !== undefined ? [allPositions[index]] : allPositions
-        if (allPositions.length === 0) return fullStr
+
+        if (index !== undefined) {
+            allPositions = filterPositionsByIndex(allPositions, index)
+        }
     
         allPositions.sort((a, b) => b.start - a.start)
     
@@ -76,3 +99,12 @@ export class LookFor {
         return result
     }
 }
+
+const fullText = 'Qq tal qQ pasa que qq es QQqq de quÉ'
+const query = 'qq'
+
+const lookFor = new LookFor({ tag: 'span', class: "test" }, { detectAccents: false, keySensitive: false })
+
+const hText = lookFor.highlight(fullText, query, [16, 1])
+
+console.log(hText)
