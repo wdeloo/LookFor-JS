@@ -41,12 +41,12 @@ function filterPositionsByIndex(allPositions: position[], index: number | number
     const maxIndex = allPositions.length
     if (typeof index === 'number') {
         const realIndex = index % maxIndex
-        const filteredPositions = [allPositions[realIndex]]
+        const filteredPositions = [allPositions[realIndex >= 0 ? realIndex : allPositions.length + realIndex]]
 
         return filteredPositions
     } else {
         const realIndex = index.map(i => i % maxIndex)
-        const filteredPositions = allPositions.filter((_, i) => realIndex.includes(i))
+        const filteredPositions = allPositions.filter((_, i) => realIndex.includes(i >= 0 ? i : allPositions.length + i))
 
         return filteredPositions
     }
@@ -99,12 +99,3 @@ export class LookFor {
         return result
     }
 }
-
-const fullText = 'Qq tal qQ pasa que qq es QQqq de quÉ'
-const query = 'qq'
-
-const lookFor = new LookFor({ tag: 'span', class: "test" }, { detectAccents: false, keySensitive: false })
-
-const hText = lookFor.highlight(fullText, query, [16, 1])
-
-console.log(hText)
