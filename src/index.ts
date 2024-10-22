@@ -14,7 +14,7 @@ interface position {
     end: number
 }
 
-function formatStr(str: string, params: params) {
+function formatStr(str: string, params: params) { // remove accents and/or uppercases
     const keySensitive: boolean = params?.keySensitive === undefined ? true : params?.keySensitive
     const detectAccents: boolean = params?.detectAccents === undefined ? true : params?.detectAccents
 
@@ -25,7 +25,7 @@ function formatStr(str: string, params: params) {
     return formattedStr
 }
 
-function getAllPositions(fullStr: string, query: string) {
+function getAllPositions(fullStr: string, query: string) { // get all the positions where the query is in the string
     const positions: position[] = []
     let position = fullStr.indexOf(query)
 
@@ -37,7 +37,7 @@ function getAllPositions(fullStr: string, query: string) {
     return positions
 }
 
-function filterPositionsByIndex(allPositions: position[], index: number | number[]) {
+function filterPositionsByIndex(allPositions: position[], index: number | number[]) { // filter the positions with the index argument
     const maxIndex = allPositions.length
     if (typeof index === 'number') {
         const realIndex = index % maxIndex
@@ -83,7 +83,7 @@ export class LookFor {
             allPositions = filterPositionsByIndex(allPositions, index)
         }
     
-        allPositions.sort((a, b) => b.start - a.start)
+        allPositions.sort((a, b) => b.start - a.start) // sort positions (the first in the array the last in the string and vice versa) in order not to move the positions in the loop on writing the tag
     
         const tag = {
             open: `<${this.props.tag}${propsString}>`,
@@ -91,7 +91,7 @@ export class LookFor {
         }
     
         let result = fullStr
-        allPositions.forEach((position) => {
+        allPositions.forEach((position) => { // write the tags in the corresponding positions
             result = result.slice(0, position.end) + tag.close + result.slice(position.end)
             result = result.slice(0, position.start) + tag.open + result.slice(position.start)
         })
