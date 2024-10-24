@@ -62,7 +62,7 @@ function filterPositionsByIndex(allPositions: position[], index: number | number
     }
 }
 
-export class LookFor {
+class LookFor {
     props: props
     params: params | undefined
 
@@ -113,3 +113,5 @@ export class LookFor {
         return result
     }
 }
+
+module.exports = LookFor

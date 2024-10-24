@@ -2,7 +2,6 @@
   "name": "lookfor-js",
   "version": "1.0.0",
   "description": "A JS library to search and highlight text in HTML from a string.",
-  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
