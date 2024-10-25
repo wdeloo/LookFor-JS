@@ -1,4 +1,23 @@
-LookFor-JS is a JavaScript library
+# LookFor-JS
+
+**LookFor-JS** is a JavaScript library that **highlights** in HTML specific substrings of a string.
+
+#### Example:
+
+```js
+const LookFor = require('lookfor-js')
+
+const lookFor = new LookFor({tag: 'span', class: 'red'}, {keySensitive: false})
+const highlighted = lookFor.highlight('Hello, world!', 'hello')
+
+console.log(highlighted) // <span class="red">Hello</span>, world!
+```
+
+# Installation
+
+```
+npm i lookfor-js
+```
 
 # Usage
 
@@ -9,7 +28,7 @@ import LookFor from 'lookfor-js'
 
 
 const lookFor = new LookFor(attributes, parameters)
-lookFor.highlight(text, query, id)
+const highlighted = lookFor.highlight(text, query, id)
 ```
 
 ## Constructor
