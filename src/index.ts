@@ -114,4 +114,4 @@ class LookFor {
     }
 }
 
-module.exports = LookFor
+export default LookFor
